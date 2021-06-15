@@ -18,5 +18,31 @@ public class Game {
         System.out.println("Lütfen bir karakter seçiniz ! ");
         player.selectChar();
 
+        Location location = null;
+
+        while(true)
+        {
+            player.printInfo();
+            System.out.println();
+            System.out.println("######Bölgeler######");
+            System.out.println();
+            System.out.println("1 - Güvenli Ev");
+            System.out.println("2 - Mağaza");
+            System.out.print("Lütfen gitmek istediğiniz bölgeyi seçiniz : ");
+            int selectLoc = input.nextInt();
+
+            location = switch (selectLoc) {
+                case 1 -> new SafeHouse(player);
+                case 2 -> new ToolStore(player);
+                default -> new SafeHouse(player);
+            };
+
+            if(!location.onLocation()){
+                System.out.println("GAME OVER !");
+                break;
+            }
+        }
+
+
     }
 }
