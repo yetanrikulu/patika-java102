@@ -1,8 +1,7 @@
 package maceraOyunu;
 
 public class Main {
-    public static void main(String[] args) {
-        //oyun burada başlıyor
+    public static void main(String[] args) {        
         Game game = new Game();
         game.start();
     }

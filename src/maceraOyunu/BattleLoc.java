@@ -2,6 +2,10 @@ package maceraOyunu;
 
 import java.util.Random;
 
+import javax.lang.model.util.ElementScanner6;
+
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
+
 public class BattleLoc extends Location{
 
     private Obstacle obstacle;
@@ -41,6 +45,12 @@ public class BattleLoc extends Location{
 
         for (int i = 1;i<=obsNumber;i++) {
             this.getObstacle().setHealth(this.getObstacle().getOriginalHealth());
+            if (this.getObstacle().getId() == 4){
+                Random random =  new Random();
+                int randomDamage = random.nextInt(4)+3;
+                this.getObstacle().setDamage(randomDamage);
+            }
+
             playerStats();
             obstacleStats(i);
 
@@ -48,27 +58,30 @@ public class BattleLoc extends Location{
                 System.out.print("<V>ur veya <K>aç : ");
                 String selectCombat =input.nextLine().toUpperCase();
                 if(selectCombat.equals("V")){
-                    System.out.println("Siz vurdunuz");
-                    this.getObstacle().setHealth(this.getObstacle().getHealth()- this.getPlayer().getTotalDamage());
-                    afterHit();
 
-                    if(this.getObstacle().getHealth()>0){
-                        System.out.println();
-                        System.out.println("Canavar Size Vurdu !");
-                        int obstacleDamage = this.getObstacle().getDamage()-this.getPlayer().getInventory().getArmor().getBlock();
-                        if(obstacleDamage<0)
-                            obstacleDamage=0;
-                        this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
-                        afterHit();
-                    }
+                    Random rand = new Random();
+
+                    int whoFirst = rand.nextInt(2);
+
+                    if (whoFirst == 0)
+                        playerFirstHit();            
+                    else
+                        obstacleFirstHit();        
+                    
                 }
                 else{
                     return false;
                 }
             }
+
             if (this.getObstacle().getHealth()<this.getPlayer().getHealth()){
                 System.out.println("Düşmanı Yendiniz !");
-                System.out.println(this.getObstacle().getAward() + " para kazandınız");
+                if (this.getObstacle().getId() !=4){
+                    System.out.println(this.getObstacle().getAward() + " para kazandınız");                    
+                }
+                else{
+                    snakeAwardSystem();
+                }
                 this.getPlayer().setMoney(this.getPlayer().getMoney()+ this.getObstacle().getAward());
                 System.out.println("Güncel Paranız " + this.getPlayer().getMoney());
             }
@@ -79,6 +92,99 @@ public class BattleLoc extends Location{
         }
 
         return true;
+    }
+
+
+    private void snakeAwardSystem(){
+
+        Random rand = new Random();
+        int randAwardChance = rand.nextInt(100);
+
+        if (randAwardChance<15){
+            int randWeapon = rand.nextInt(100);
+            if (randWeapon <20){
+                System.out.println("Tüfek Kazandınız ! ");
+                this.getPlayer().getInventory().setWeapon(Weapon.weapons()[2]);
+            }
+            else if (randWeapon<50){
+                System.out.println("Kılıç Kazandınız ! ");
+                this.getPlayer().getInventory().setWeapon(Weapon.weapons()[1]);
+            }
+            else {
+                System.out.println("Tabanca Kazandınız ! ");
+                this.getPlayer().getInventory().setWeapon(Weapon.weapons()[0]);
+            }
+        }
+        else if (randAwardChance<30){
+            int randArmor = rand.nextInt(100);
+            if (randArmor<20){
+                System.out.println("Ağır Zırh Kazandınız ! ");
+                this.getPlayer().getInventory().setArmor(Armor.armors()[2]);
+            }
+            else if(randArmor<50){
+                System.out.println("Orta Zırh Kazandınız ! ");
+                this.getPlayer().getInventory().setArmor(Armor.armors()[1]);
+            } 
+            else {
+                System.out.println("Hafif Zırh Kazandınız ! ");
+                this.getPlayer().getInventory().setArmor(Armor.armors()[0]);
+            }
+
+        }
+        else if (randAwardChance<55){
+            int randMoney = rand.nextInt(100);
+            if (randMoney<20){
+                System.out.println("10 Para Kazandınız !");
+                this.getPlayer().setMoney(this.getPlayer().getMoney()+ 10);
+            }
+            else if(randMoney<50){
+                System.out.println("5 Para Kazandınız !");                
+                this.getPlayer().setMoney(this.getPlayer().getMoney()+ 5);
+
+            } 
+            else {
+                System.out.println("1 Para Kazandınız !");
+                this.getPlayer().setMoney(this.getPlayer().getMoney()+ 1);
+            }
+        }
+        
+
+    }
+
+
+    private void playerFirstHit(){
+        
+        System.out.println("Siz vurdunuz");
+        this.getObstacle().setHealth(this.getObstacle().getHealth()- this.getPlayer().getTotalDamage());
+        afterHit();
+
+        if(this.getObstacle().getHealth()>0){
+            System.out.println();
+            System.out.println("Canavar Size Vurdu !");
+            int obstacleDamage = this.getObstacle().getDamage()-this.getPlayer().getInventory().getArmor().getBlock();
+            if(obstacleDamage<0)
+                obstacleDamage=0;
+            this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
+            afterHit();
+        }
+    }
+
+    private void obstacleFirstHit(){
+        
+        System.out.println("Canavar Size Vurdu !");
+        int obstacleDamage = this.getObstacle().getDamage()-this.getPlayer().getInventory().getArmor().getBlock();
+        if(obstacleDamage<0)
+            obstacleDamage=0;
+        this.getPlayer().setHealth(this.getPlayer().getHealth() - obstacleDamage);
+        afterHit();
+        
+        if (this.getPlayer().getHealth()>0)
+        {
+            System.out.println("Siz vurdunuz");
+            this.getObstacle().setHealth(this.getObstacle().getHealth()- this.getPlayer().getTotalDamage());
+            afterHit();
+        }        
+        
     }
 
     public void afterHit(){
