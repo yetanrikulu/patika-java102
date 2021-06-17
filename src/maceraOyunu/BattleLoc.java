@@ -2,10 +2,6 @@ package maceraOyunu;
 
 import java.util.Random;
 
-import javax.lang.model.util.ElementScanner6;
-
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
-
 public class BattleLoc extends Location{
 
     private Obstacle obstacle;
