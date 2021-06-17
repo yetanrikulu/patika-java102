@@ -1,6 +1,4 @@
-package maceraOyunu;
-
-import java.nio.file.Watchable;
+package maceraOyunu;;
 
 public class Weapon {
 

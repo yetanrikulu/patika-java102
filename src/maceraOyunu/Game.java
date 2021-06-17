@@ -46,13 +46,28 @@ public class Game {
                     location = new ToolStore(player);
                     break;
                 case 3 :
-                    location=new Cave(player);
+                    if(!player.isFood())
+                        location=new Cave(player);
+                    else{
+                        System.out.println("Mağarayı daha önce temizlediğin için giriş yapamazsın !");
+                        location = new SafeHouse(player);
+                    }
                     break;
                 case 4:
-                    location = new Forrest(player);
+                    if (!player.isFirewood())
+                        location = new Forrest(player);
+                    else{
+                        System.out.println("Ormanı daha önce temizlediğin için giriş yapamazsın !");
+                        location = new SafeHouse(player);
+                    }
                     break;
                 case 5:
-                    location = new River(player);
+                    if (!player.isWater())
+                        location = new River(player);
+                    else{
+                        System.out.println("Nehri daha önce temizlediğin için giriş yapamazsın !");
+                        location = new SafeHouse(player);
+                    }
                     break;
                 default :
                     location = new SafeHouse(player);
@@ -65,10 +80,15 @@ public class Game {
                 break;
             }
 
-            if(!location.onLocation() ){
+            if(!location.onLocation()){
                 System.out.println("GAME OVER !");
                 break;
             }
+
+            if(player.isWin()){
+                break;
+            }
+
         }
 
 

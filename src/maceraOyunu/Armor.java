@@ -17,8 +17,8 @@ public class Armor {
     public static Armor[] armors(){
         Armor[] armorList = new Armor[3];
         armorList[0] = new Armor(1,"Hafif",1,15);
-        armorList[0] = new Armor(2,"Orta",3,25);
-        armorList[0] = new Armor(3,"Ağır",5,40);
+        armorList[1] = new Armor(2,"Orta",3,25);
+        armorList[2] = new Armor(3,"Ağır",5,40);
 
         return armorList;
 

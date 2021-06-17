@@ -10,9 +10,47 @@ public class Player {
     private int money;
     private String charName;
     private String name;
+    private Inventory inventory;
+
+    private boolean isFood=false;
+    private boolean isFirewood=false;
+    private boolean isWater=false;
+    private boolean isWin = false;
+
+    public void setWin(boolean win) {
+        isWin = win;
+    }
+
+    public boolean isWin() {
+        return isWin;
+    }
+
+    public boolean isFood() {
+        return isFood;
+    }
+
+    public void setFood(boolean food) {
+        isFood = food;
+    }
+
+    public boolean isFirewood() {
+        return isFirewood;
+    }
+
+    public void setFirewood(boolean firewood) {
+        isFirewood = firewood;
+    }
+
+    public boolean isWater() {
+        return isWater;
+    }
+
+    public void setWater(boolean water) {
+        isWater = water;
+    }
+
     private Scanner input = new Scanner (System.in);
 
-    private Inventory inventory;
 
     public Player (String name){
         this.name = name;
@@ -34,10 +72,17 @@ public class Player {
         System.out.print("Lütfen bir karakter seçiniz : ");
         int selectChar=input.nextInt();
         switch (selectChar) {
-            case 1 -> initPlayer(new Samurai());
-            case 2 -> initPlayer(new Archer());
-            case 3 -> initPlayer(new Knight());
-            default -> initPlayer(new Samurai());
+            case 1 :
+                initPlayer(new Samurai());
+                break;
+            case 2 :
+                initPlayer(new Archer());
+                break;
+            case 3 :
+                initPlayer(new Knight());
+                break;
+            default :
+                initPlayer(new Samurai());
         }
         /*System.out.println("Karakter : " + this.getCharName() +
                 ", Hasar :  "+ this.getDamage() +

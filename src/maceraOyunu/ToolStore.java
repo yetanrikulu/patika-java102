@@ -18,25 +18,24 @@ public class ToolStore extends NormalLoc{
             int selectCase = input.nextInt();
             while(selectCase<1 || selectCase >3)
             {
-                System.out.println("Geçersiz değer, tekrar giriniz : ");
+                System.out.print("Geçersiz değer, tekrar giriniz : ");
                 selectCase = input.nextInt();
             }
+
             switch (selectCase) {
-                case 1 -> {
+                case 1 :
                     printWeapon();
                     buyWeapon();
                     break;
-                }
-                case 2 -> {
+                case 2 :
                     printArmor();
                     buyArmor();
                     break;
-                }
-                case 3 -> {
+                case 3 :
                     System.out.println("Bir daha bekleriz !");
                     showMenu=false;
                     break;
-                }
+
             }
         }
         return true;

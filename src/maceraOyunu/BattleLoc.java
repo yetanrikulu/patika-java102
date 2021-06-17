@@ -1,6 +1,5 @@
 package maceraOyunu;
 
-import java.util.Locale;
 import java.util.Random;
 
 public class BattleLoc extends Location{
@@ -26,6 +25,7 @@ public class BattleLoc extends Location{
         selectCase = selectCase.toUpperCase();
         if(selectCase.equals("S") && combat(obsNumber)){
                 System.out.println(this.getName() + " tüm düşmanları yendiniz !");
+                getFinalAward();
                 return true;
         }
 
@@ -46,7 +46,7 @@ public class BattleLoc extends Location{
 
             while(this.getPlayer().getHealth()>0 && this.getObstacle().getHealth()>0) {
                 System.out.print("<V>ur veya <K>aç : ");
-                String selectCombat =input.nextLine().toUpperCase(Locale.ROOT);
+                String selectCombat =input.nextLine().toUpperCase();
                 if(selectCombat.equals("V")){
                     System.out.println("Siz vurdunuz");
                     this.getObstacle().setHealth(this.getObstacle().getHealth()- this.getPlayer().getTotalDamage());
@@ -113,6 +113,8 @@ public class BattleLoc extends Location{
         Random r = new Random();
         return r.nextInt(this.getMaxObstacle()) + 1;
     }
+
+    public void getFinalAward(){};
 
     public Obstacle getObstacle() {
         return obstacle;
