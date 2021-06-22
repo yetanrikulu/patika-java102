@@ -11,8 +11,6 @@ public class FiksturMain {
         List<Team> tempTakimlar = new ArrayList<>();
         List<Round> rounds = new ArrayList<>();
 
-        Map<String, List<String>> takimMap = new HashMap<>();
-
         Team homeTeam,awayTeam;
 
         takimlar.add(new Team("Galatasaray"));
@@ -44,7 +42,6 @@ public class FiksturMain {
                 random = rand.nextInt(tempTakimlar.size());
 
                 while (true){
-                    int count= 0;
                     awayTeam = tempTakimlar.get(random);
                     if (!homeTeam.opponent.contains(awayTeam.name)){
                         homeTeam.opponent.add(awayTeam.name);
