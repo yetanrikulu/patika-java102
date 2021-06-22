@@ -1,6 +1,7 @@
 package fikstur;
 
 import java.util.*;
+import java.util.concurrent.locks.StampedLock;
 
 public class FiksturMain {
     public static void main(String[] args) {
@@ -30,38 +31,36 @@ public class FiksturMain {
 
         while (ilkDevreMacSayisi>0){
 
-            tempTakimlar.clear();
             tempTakimlar.addAll(takimlar);
             Round r = new Round(round);
 
-            while (tempTakimlar.size()>0){
+            while (tempTakimlar.size()>0) {
+                int count = 0 ;
                 int random = rand.nextInt(tempTakimlar.size());
 
                 homeTeam = tempTakimlar.get(random);
-                tempTakimlar.remove(random);
+                tempTakimlar.remove(homeTeam);
                 random = rand.nextInt(tempTakimlar.size());
+                awayTeam = tempTakimlar.get(random);
 
-                while (true){
-                    awayTeam = tempTakimlar.get(random);
-                    if (!homeTeam.opponent.contains(awayTeam.name)){
-                        homeTeam.opponent.add(awayTeam.name);
-                        tempTakimlar.remove(awayTeam);
-                        r.homeTeams.add(homeTeam.name);
-                        r.awayTeam.add(awayTeam.name);
-                        break;
-                    }
-                    else{
-                        tempTakimlar.add(homeTeam);
-                        break;
-                    }
+                if (!homeTeam.opponent.contains(awayTeam.name)) {
+                    homeTeam.opponent.add(awayTeam.name);
+                    tempTakimlar.remove(awayTeam);
+                    r.homeTeams.add(homeTeam.name);
+                    r.awayTeam.add(awayTeam.name);
                 }
-
-
+                else {
+                    r = new Round(round);
+                    tempTakimlar.clear();
+                    tempTakimlar.addAll(takimlar);
+                }
             }
 
             ilkDevreMacSayisi--;
             round++;
             rounds.add(r);
+
+
         }
 
         for(Round r : rounds){
