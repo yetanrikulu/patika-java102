@@ -143,6 +143,36 @@ public class User {
         return obj;
     }
 
+    public static User getFetch(String uname, String pass){
+        User obj = null;
+        String query = "SELECT * FROM users WHERE uname =? AND pass =?";
+        try {
+            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
+            pr.setString(1,uname);
+            pr.setString(2,pass);
+            ResultSet rs = pr.executeQuery();
+            if(rs.next()){
+
+                switch (rs.getString("type")){
+                    case "operator":
+                        obj =new Operator();
+                        break;
+                    default:
+                        obj=new User();
+                }
+                obj.setId(rs.getInt("id"));
+                obj.setName(rs.getString("name"));
+                obj.setUname(rs.getString("uname"));
+                obj.setPass(rs.getString("pass"));
+                obj.setType(rs.getString("type"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return obj;
+    }
+
     public static User getFetch(int id){
         User obj = null;
         String query = "SELECT * FROM users WHERE id =?";
@@ -167,9 +197,15 @@ public class User {
 
     public static boolean delete (int id){
         String query = "Delete From users Where id =?";
+        ArrayList<Course> courseList = Course.getListByUser(id);
+        for (Course c: courseList){
+            Course.delete(c.getId());
+        }
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
             pr.setInt(1,id);
+
+
             return pr.executeUpdate() !=-1;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -236,6 +272,31 @@ public class User {
         }
 
         return query;
+    }
+
+    public static ArrayList<User> getListOnlyEducator(){
+        ArrayList<User> userList = new ArrayList<>();
+        String query="Select * From users WHERE type='educator'";
+        User obj;
+        try {
+            Statement st = DBConnector.getInstance().createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()){
+                obj = new User();
+                obj.setId(rs.getInt("id"));
+                obj.setName(rs.getString("name"));
+                obj.setUname(rs.getString("uname"));
+                obj.setPass(rs.getString("pass"));
+                obj.setType(rs.getString("type"));
+                userList.add(obj);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return userList;
     }
 
 }
